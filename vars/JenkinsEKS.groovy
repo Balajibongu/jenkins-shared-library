@@ -10,7 +10,7 @@ def call(Map configMap){
         project= configMap.get("project")
         component = configMap.get("component")
         deploy_to = configMap.get("deploy_to")
-        vesion= ""
+        vesion= configMap.get("version")
     }
     options{
         timeout(time: 20, unit: 'MINUTES')
@@ -18,16 +18,6 @@ def call(Map configMap){
         ansiColor('xterm')
     } 
     stages{
-        stage("read the version"){
-            steps{
-                script{
-                    def file= readJSON file: 'package.json'
-                    version = file.version
-                    echo "this is building space for catalogue"
-                    echo "this is node version: ${version}"
-                }     
-            }
-        }
         stage("build"){
             steps{
                 withAWS(credentials: 'aws-credentials', region: "${env.region}" )
