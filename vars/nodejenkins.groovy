@@ -119,7 +119,7 @@ def call(Map configMap){
             steps{
                 script{
                     sh """
-                    build job: "../${component}_deploy",
+                    build job: "cd ../${component}_deploy",
                         wait: false,
                         propagate: false
                     """
