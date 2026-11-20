@@ -10,6 +10,7 @@ def call(Map configMap){
         project= configMap.get("project")
         component = configMap.get("component")
         deploy_to = configMap.get("deploy_to")
+        vesion= ""
     }
     options{
         timeout(time: 20, unit: 'MINUTES')
@@ -17,6 +18,16 @@ def call(Map configMap){
         ansiColor('xterm')
     } 
     stages{
+        stage("read the version"){
+            steps{
+                script{
+                    def file= readJSON file: 'package.json'
+                    version = file.version
+                    echo "this is building space for catalogue"
+                    echo "this is node version: ${version}"
+                }     
+            }
+        }
         stage("build"){
             steps{
                 withAWS(credentials: 'aws-credentials', region: "${env.region}" )
@@ -25,7 +36,7 @@ def call(Map configMap){
                         set -e
                         aws eks update-kubeconfig --region ${region} --name ${project}-${deploy_to}
                         kubectl get nodes 
-                        sed -i "s/IMAGE_VERSION/${app_vesion}/g" values.yaml
+                        sed -i "s/IMAGE_VERSION/${vesion}/g" values.yaml
                         sed -i "s/ENV/${deploy_to}/g" values.yaml
                         helm upgrade --install ${component} -f values-${deploy_to}.yaml --atomic --wait --timeout=5m .
                     """
