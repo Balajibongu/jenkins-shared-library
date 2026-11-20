@@ -11,7 +11,7 @@ def call(Map configMap){
         version = ""
     }
     options{
-        timeout(time: 10, unit: 'MINUTES')
+        timeout(time: 20, unit: 'MINUTES')
         disableConcurrentBuilds() 
         ansiColor('xterm')
     } 
@@ -113,6 +113,17 @@ def call(Map configMap){
                     --pkg-types os \
                     832510228841.dkr.ecr.us-east-1.amazonaws.com/${project}/${component}:${version}
                 """
+            }
+        }
+        stage("deployment"){
+            steps{
+                script{
+                    sh """
+                    build job: "../${component}_deploy",
+                        wait: false,
+                        propagate: false
+                    """
+                }
             }
         }
     }
