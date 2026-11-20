@@ -19,7 +19,7 @@ def call(Map configMap){
     stages{
         stage("build"){
             steps{
-                withAWS(credentials: 'aws-credentials', region: ${env.region} )
+                withAWS(credentials: 'aws-credentials', region: "${env.region}" )
                 {
                     sh """
                         set -e
