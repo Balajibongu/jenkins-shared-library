@@ -26,7 +26,7 @@ def call(Map configMap){
                         set -e
                         aws eks update-kubeconfig --region ${region} --name ${project}-${deploy_to}
                         kubectl get nodes 
-                        // kubectl create namespace roboshop
+                        # kubectl create namespace roboshop
                         sed -i "s/IMAGE_VERSION/${vesion}/g" values.yaml
                         sed -i "s/ENV/${deploy_to}/g" values.yaml
                         helm upgrade --install ${component}-deploy -f values-${deploy_to}.yaml -n ${project} --atomic --wait --timeout=5m .
