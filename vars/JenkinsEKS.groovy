@@ -28,7 +28,7 @@ def call(Map configMap){
                         kubectl get nodes 
                         sed -i "s/IMAGE_VERSION/${vesion}/g" values.yaml
                         sed -i "s/ENV/${deploy_to}/g" values.yaml
-                        helm upgrade --install ${component} -f values-${deploy_to}.yaml --atomic --wait --timeout=5m .
+                        helm upgrade --install ${component} -f values-${deploy_to}.yaml -n ${project} --atomic --wait --timeout=5m .
                     """
                 }
             }
