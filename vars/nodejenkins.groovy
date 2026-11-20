@@ -118,11 +118,9 @@ def call(Map configMap){
         stage("deployment"){
             steps{
                 script{
-                    sh """
-                    build job: "cd ../${component}_deploy",
-                        wait: false,
-                        propagate: false
-                    """
+                    build job: "../${component}_deploy",
+                    wait: false,
+                    propagate: false
                 }
             }
         }
